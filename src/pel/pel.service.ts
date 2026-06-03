@@ -44,6 +44,7 @@ export class PELService {
       .getMany();
     if (active.length === 0)
       return { allowed: true, reason: "NO_ACTIVE_DELEGATION" };
+
     const delegation = active[0];
     // 2. Patent core: non-designated entity → terminate execution path
     if (!req.isDesignatedEntity) {
@@ -60,6 +61,7 @@ export class PELService {
         delegationId: delegation.id,
       };
     }
+
     // 3. Redis atomic slot lock — prevents race condition on concurrent bookings
     const lockKey = `lock:room:${req.roomId}:${req.requestedStart.getTime()}`;
     const acquired = await this.redis.set(
@@ -75,6 +77,7 @@ export class PELService {
         reason: "LOCK_CONTENTION",
         delegationId: delegation.id,
       };
+
     // 4. PSM overlap check
     const psmResult = await this.psm.validateAndAccept(
       req.roomId,
@@ -102,7 +105,7 @@ export class PELService {
   async releaseLock(lockKey: string): Promise<void> {
     await this.redis.del(lockKey);
   }
-  
+
   // Patent section 2.1 — inject temporal exclusion predicates before query planning
   async rewriteAvailabilityQuery(
     roomId: string,

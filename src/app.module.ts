@@ -15,9 +15,9 @@ import { DelegationRecord } from "./delegation/delegation.entity";
 import { AdmittedInterval } from "./psm/admitted-interval.entity";
 import { TemporalLedger } from "./ledger/temporal-ledger.entity";
 import { WholesaleBooking } from "./wholesale/wholesale-booking.entity";
-import { ManualBooking } from './manual-booking/manual-booking.entity';
-import { StaffCommissionAccount } from './manual-booking/staff-commission.entity';
-import { CommissionPayoutRequest} from './manual-booking/payout-request.entity';
+import { ManualBooking } from "./manual-booking/manual-booking.entity";
+import { StaffCommissionAccount } from "./manual-booking/staff-commission.entity";
+import { CommissionPayoutRequest } from "./manual-booking/payout-request.entity";
 // Services & Workers
 import { PELService } from "./pel/pel.service";
 import { PSMEngine } from "./psm/psm.engine";
@@ -37,8 +37,8 @@ import { WholesaleService } from "./wholesale/wholesale.service";
 import { WholesaleBookingService } from "./wholesale/wholesale-booking.service";
 import { WholesaleExpiryWorker } from "./wholesale/wholesale-expiry.worker";
 import { VacateService } from "./vacate/vacate.service";
-import { ManualBookingService } from './manual-booking/manual-booking.service';
-import { CancellationService } from './cancellation/cancellation.service';
+import { ManualBookingService } from "./manual-booking/manual-booking.service";
+import { CancellationService } from "./cancellation/cancellation.service";
 // Controllers
 import { BookingController } from "./booking/booking.controller";
 import { SearchController } from "./search/search.controller";
@@ -46,9 +46,9 @@ import { PaymentController } from "./payment/payment.controller";
 import { DashboardController } from "./dashboard/dashboard.controller";
 import { VacateController } from "./vacate/vacate.controller";
 import { MyBookingsController } from "./booking/my-bookings.controller";
-import { ManualBookingController } from './manual-booking/manual-booking.controller';
-import { CommissionController } from './commission/commission.controller';
-import { CancellationController } from './cancellation/cancellation.controller';
+import { ManualBookingController } from "./manual-booking/manual-booking.controller";
+import { CommissionController } from "./commission/commission.controller";
+import { CancellationController } from "./cancellation/cancellation.controller";
 
 @Module({
   imports: [
@@ -72,8 +72,8 @@ import { CancellationController } from './cancellation/cancellation.controller';
           AdmittedInterval,
           TemporalLedger,
           WholesaleBooking,
-          ManualBooking, 
-          StaffCommissionAccount, 
+          ManualBooking,
+          StaffCommissionAccount,
           CommissionPayoutRequest,
         ],
       }),
@@ -88,8 +88,8 @@ import { CancellationController } from './cancellation/cancellation.controller';
       AdmittedInterval,
       TemporalLedger,
       WholesaleBooking,
-      ManualBooking, 
-      StaffCommissionAccount, 
+      ManualBooking,
+      StaffCommissionAccount,
       CommissionPayoutRequest,
     ]),
   ],
@@ -100,11 +100,12 @@ import { CancellationController } from './cancellation/cancellation.controller';
     DashboardController,
     VacateController,
     MyBookingsController,
-    ManualBookingController, 
+    ManualBookingController,
     CommissionController,
     CancellationController,
     // AuthController is registered inside AuthModule
   ],
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   providers: [
     PELService,
     PSMEngine,

@@ -32,7 +32,6 @@ export class BookingService {
     endTime: Date;
     slotType: string;
   }) {
-
     // 1. PEL validates and acquires Redis lock
     const pel = await this.pel.validateAndLock({
       ...params,
@@ -98,7 +97,7 @@ export class BookingService {
       amount: price,
     };
   }
-  
+
   // Called by PaymentController AFTER webhook fires
   async onPaymentSuccess(orderId: string, transactionId: string) {
     const booking = await this.repo.findOne({

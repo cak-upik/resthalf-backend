@@ -61,7 +61,7 @@ export class ExtendStayService {
       newEnd,
     };
   }
-  
+
   async confirmExtend(delegationId: string, newEnd: Date) {
     await this.delegations.update(delegationId, { endTime: newEnd });
     await this.ledger.append({

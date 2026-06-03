@@ -4,6 +4,7 @@ import { SearchService } from "./search.service";
 @Controller("search")
 export class SearchController {
   constructor(private searchSvc: SearchService) {}
+  
   @Get()
   search(
     @Query("city") city: string,

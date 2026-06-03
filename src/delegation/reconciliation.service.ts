@@ -13,6 +13,7 @@ export class ReconciliationService {
     private repo: Repository<DelegationRecord>,
     private psm: PSMEngine,
     private ds: DataSource,
+    private ledger: LedgerService,
   ) {}
 
   // Called on guest checkout (vacate) — not on expiry

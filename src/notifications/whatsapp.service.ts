@@ -2,6 +2,7 @@ import { Injectable, Logger } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { ConfigService } from "@nestjs/config";
 import { Guest } from "../guests/guest.entity";
+import { Repository } from "typeorm";
 
 import axios from "axios";
 
@@ -10,8 +11,8 @@ export class WhatsAppService {
   private readonly logger = new Logger(WhatsAppService.name);
   constructor(
     @InjectRepository(Guest) private guestRepo: Repository<Guest>,
-    private config: ConfigService
-) {}
+    private config: ConfigService,
+  ) {}
 
   async sendRaw(to: string, body: string) {
     const phoneId = this.config.get("WHATSAPP_PHONE_ID");

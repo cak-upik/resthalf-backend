@@ -5,10 +5,10 @@ import { VacateService } from "./vacate.service";
 @Controller("vacate")
 @UseGuards(JwtAuthGuard)
 export class VacateController {
-  constructor(private vacate: VacateService) {}
-  
+  constructor(private vacateSvc: VacateService) {}
+
   @Post(":delegationId")
   vacate(@Param("delegationId") id: string, @Request() req: any) {
-    return this.vacate.vacate(id, req.user.id);
+    return this.vacateSvc.vacate(id, req.user.id);
   }
 }

@@ -11,7 +11,7 @@ import {
   RefundCalculation,
   DIRECT_CANCELLATION_RULES,
 } from "./cancellation.types";
-import { parseSupplierPolicy, calcDirectPolicy } from "./policy-parser";
+import { parseSupplierPolicy } from "./policy-parser";
 
 @Injectable()
 export class CancellationService {

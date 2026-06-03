@@ -35,7 +35,7 @@ export class HotelsController {
   findAll() {
     return this.repo.find({ where: { isActive: true } });
   }
-  
+
   @Get(":id")
   findOne(@Param("id") id: string) {
     return this.repo.findOneOrFail({ where: { id } });
@@ -47,7 +47,7 @@ export class HotelsController {
       .update(id, body)
       .then(() => this.repo.findOneOrFail({ where: { id } }));
   }
-  
+
   @Patch(":id/deactivate")
   deactivate(@Param("id") id: string) {
     return this.repo.update(id, { isActive: false });

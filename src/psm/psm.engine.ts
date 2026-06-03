@@ -65,10 +65,19 @@ export class PSMEngine {
     return this.trees.get(this.key(roomId, delegationId))?.getAll() ?? [];
   }
 
+  evict(roomId: string, intervalId: string): void {
+    // Search all trees for this room and remove the interval
+    for (const [key, tree] of this.trees.entries()) {
+      if (key.startsWith(roomId)) {
+        tree.remove(intervalId);
+      }
+    }
+  }
+
   destroyTree(roomId: string, delegationId: string): void {
     this.trees.delete(this.key(roomId, delegationId));
   }
-  
+
   private key(roomId: string, delegationId: string) {
     return `${roomId}:${delegationId}`;
   }

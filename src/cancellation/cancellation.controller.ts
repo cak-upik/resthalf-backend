@@ -7,7 +7,7 @@ import {
   Request,
   UseGuards,
 } from "@nestjs/common";
-import { JwtAuthGuard } from "../auth/jwt.guard";
+import { JwtAuthGuard } from "@/auth/jwt.guard";
 import { CancellationService } from "./cancellation.service";
 
 @Controller()
@@ -35,7 +35,7 @@ export class CancellationController {
   ) {
     return this.svc.cancelDirect(id, req.user.id, body.reason);
   }
-  
+
   @Post("wholesale/:id/cancel")
   cancelWholesale(
     @Param("id") id: string,
