@@ -39,7 +39,11 @@ import { WholesaleExpiryWorker } from "./wholesale/wholesale-expiry.worker";
 import { VacateService } from "./vacate/vacate.service";
 import { ManualBookingService } from "./manual-booking/manual-booking.service";
 import { CancellationService } from "./cancellation/cancellation.service";
+import { ExtendStayService } from "./booking/extend-stay.service";
+import { RescheduleService } from "./reschedule/reschedule.service";
+import { AppService } from "./app.service";
 // Controllers
+import { AppController } from "./app.controller";
 import { BookingController } from "./booking/booking.controller";
 import { SearchController } from "./search/search.controller";
 import { PaymentController } from "./payment/payment.controller";
@@ -49,6 +53,12 @@ import { MyBookingsController } from "./booking/my-bookings.controller";
 import { ManualBookingController } from "./manual-booking/manual-booking.controller";
 import { CommissionController } from "./commission/commission.controller";
 import { CancellationController } from "./cancellation/cancellation.controller";
+import { ExtendStayController } from "./booking/extend-stay.controller";
+import { RescheduleController } from "./reschedule/reschedule.controller";
+import { HotelsController } from "./hotels/hotels.controller";
+import { RoomsController } from "./rooms/rooms.controller";
+import { StaffController } from "./staff/staff.controller";
+import { WholesaleCancelController } from "./wholesale/wholesale-cancel.controller";
 
 @Module({
   imports: [
@@ -94,6 +104,7 @@ import { CancellationController } from "./cancellation/cancellation.controller";
     ]),
   ],
   controllers: [
+    AppController,
     BookingController,
     SearchController,
     PaymentController,
@@ -103,10 +114,17 @@ import { CancellationController } from "./cancellation/cancellation.controller";
     ManualBookingController,
     CommissionController,
     CancellationController,
+    ExtendStayController,
+    RescheduleController,
+    HotelsController,
+    RoomsController,
+    StaffController,
+    WholesaleCancelController,
     // AuthController is registered inside AuthModule
   ],
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   providers: [
+    AppService,
     PELService,
     PSMEngine,
     DelegationService,
@@ -127,6 +145,8 @@ import { CancellationController } from "./cancellation/cancellation.controller";
     VacateService,
     ManualBookingService,
     CancellationService,
+    ExtendStayService,
+    RescheduleService,
   ],
 })
 export class AppModule {}

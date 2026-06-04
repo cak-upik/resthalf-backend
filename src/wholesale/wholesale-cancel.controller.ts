@@ -6,6 +6,7 @@ import {
   UseGuards,
   BadRequestException,
 } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { JwtAuthGuard } from "../auth/jwt.guard";
@@ -13,6 +14,8 @@ import { WholesaleBooking } from "./wholesale-booking.entity";
 import { TBOProvider } from "./providers/tbo.provider";
 import { HotelbedsProvider } from "./providers/hotelbeds.provider";
 
+@ApiTags("Bookings")
+@ApiBearerAuth("access-token")
 @Controller("bookings/wholesale")
 @UseGuards(JwtAuthGuard)
 export class WholesaleCancelController {
@@ -23,6 +26,7 @@ export class WholesaleCancelController {
     private hotelbeds: HotelbedsProvider,
   ) {}
   
+  @ApiOperation({ summary: "Cancel a wholesale booking (supplier policy applies)" })
   @Delete(":id")
   async cancel(@Param("id") id: string, @Request() req: any) {
     const b = await this.repo.findOne({ where: { id, guestId: req.user.id } });

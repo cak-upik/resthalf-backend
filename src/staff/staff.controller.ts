@@ -8,28 +8,24 @@ import {
   UseGuards,
   Query,
 } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import * as bcrypt from "bcrypt";
 import { StaffAuthGuard } from "../auth/staff-auth.guard";
 import { Staff } from "./staff.entity";
+import { CreateStaffDto } from "./dto/create-staff.dto";
 
+@ApiTags("Admin")
+@ApiBearerAuth("access-token")
 @Controller("admin/staff")
 @UseGuards(StaffAuthGuard)
 export class StaffController {
   constructor(@InjectRepository(Staff) private repo: Repository<Staff>) {}
 
+  @ApiOperation({ summary: "Create a staff member" })
   @Post()
-  async create(
-    @Body()
-    body: {
-      hotelId: string;
-      name: string;
-      phone: string;
-      role?: string;
-      password: string;
-    },
-  ) {
+  async create(@Body() body: CreateStaffDto) {
     const passwordHash = await bcrypt.hash(body.password, 12);
     const { password, ...rest } = body;
     return this.repo.save(this.repo.create({ ...rest, passwordHash }));

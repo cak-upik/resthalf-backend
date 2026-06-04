@@ -8,13 +8,18 @@ import {
   Request,
   BadRequestException,
 } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { StaffAuthGuard } from "../auth/staff-auth.guard";
 import { StaffCommissionAccount } from "../manual-booking/staff-commission.entity";
 import { CommissionPayoutRequest } from "../manual-booking/payout-request.entity";
 import { ManualBooking } from "../manual-booking/manual-booking.entity";
+import { RequestPayoutDto } from "./dto/request-payout.dto";
+import { RejectPayoutDto } from "./dto/reject-payout.dto";
 
+@ApiTags("Commission")
+@ApiBearerAuth("access-token")
 @Controller("commission")
 @UseGuards(StaffAuthGuard)
 export class CommissionController {
@@ -65,16 +70,9 @@ export class CommissionController {
   }
 
   // Staff: request payout
+  @ApiOperation({ summary: "Request a commission payout" })
   @Post("request-payout")
-  async requestPayout(
-    @Body()
-    body: {
-      amount: number;
-      payoutMethod: string;
-      accountDetails: any;
-    },
-    @Request() req: any,
-  ) {
+  async requestPayout(@Body() body: RequestPayoutDto, @Request() req: any) {
     const a = await this.accounts.findOne({
       where: { staffId: req.staff.id, hotelId: req.staff.hotelId },
     });
@@ -127,10 +125,11 @@ export class CommissionController {
   }
   
   // Manager: reject payout request
+  @ApiOperation({ summary: "Manager: reject a payout request" })
   @Post("payouts/:id/reject")
   async rejectPayout(
     @Param("id") id: string,
-    @Body() body: { reason: string },
+    @Body() body: RejectPayoutDto,
     @Request() req: any,
   ) {
     if (req.staff.role !== "manager")

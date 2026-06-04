@@ -7,17 +7,22 @@ import {
   UseGuards,
   Request,
 } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { StaffAuthGuard } from "../auth/staff-auth.guard";
 import { ManualBookingService } from "./manual-booking.service";
+import { CreateManualBookingDto } from "./dto/create-manual-booking.dto";
 
+@ApiTags("Manual Bookings")
+@ApiBearerAuth("access-token")
 @Controller("manual-bookings")
 @UseGuards(StaffAuthGuard)
 export class ManualBookingController {
   constructor(private svc: ManualBookingService) {}
 
   // POST /manual-bookings — receptionist creates walk-in booking
+  @ApiOperation({ summary: "Create a walk-in (manual) booking" })
   @Post()
-  async create(@Body() body: any, @Request() req: any) {
+  async create(@Body() body: CreateManualBookingDto, @Request() req: any) {
     return this.svc.create({
       hotelId: req.staff.hotelId,
       roomId: body.roomId,
@@ -29,7 +34,11 @@ export class ManualBookingController {
       endTime: new Date(body.endTime),
       slotType: body.slotType,
       totalAmount: +body.totalAmount,
-      paymentMethod: body.paymentMethod ?? "AT_HOTEL",
+      paymentMethod: (body.paymentMethod ?? "AT_HOTEL") as
+        | "AT_HOTEL"
+        | "CASH"
+        | "CARD"
+        | "QRIS",
       commissionPercent: body.commissionPercent ?? 10,
       notes: body.notes,
     });

@@ -8,30 +8,24 @@ import {
   UseGuards,
   Query,
 } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { StaffAuthGuard } from "../auth/staff-auth.guard";
 import { Room } from "./room.entity";
+import { CreateRoomDto } from "./dto/create-room.dto";
+import { UpdatePricingDto } from "./dto/update-pricing.dto";
 
+@ApiTags("Admin")
+@ApiBearerAuth("access-token")
 @Controller("admin/rooms")
 @UseGuards(StaffAuthGuard)
 export class RoomsController {
   constructor(@InjectRepository(Room) private repo: Repository<Room>) {}
 
+  @ApiOperation({ summary: "Create a room" })
   @Post()
-  create(
-    @Body()
-    body: {
-      hotelId: string;
-      roomNumber: string;
-      roomType: string;
-      floor: number;
-      basePriceH12: number;
-      basePriceH24: number;
-      currency?: string;
-      isRingFenced?: boolean;
-    },
-  ) {
+  create(@Body() body: CreateRoomDto) {
     return this.repo.save(
       this.repo.create({ ...body, isRingFenced: body.isRingFenced ?? true }),
     );
@@ -54,16 +48,9 @@ export class RoomsController {
     return this.repo.update(id, { isRingFenced: false });
   }
   
+  @ApiOperation({ summary: "Update room pricing" })
   @Patch(":id/pricing")
-  updatePricing(
-    @Param("id") id: string,
-    @Body()
-    body: {
-      basePriceH12?: number;
-      basePriceH24?: number;
-      currency?: string;
-    },
-  ) {
+  updatePricing(@Param("id") id: string, @Body() body: UpdatePricingDto) {
     return this.repo.update(id, body);
   }
 }

@@ -23,6 +23,7 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
+    "@nestjs-modules/ioredis": "^2.0.2",
     "@nestjs/common": "^11.0.17",
     "@nestjs/config": "^4.0.2",
     "@nestjs/core": "^11.0.1",
@@ -31,7 +32,7 @@
     "@nestjs/platform-express": "^11.1.11",
     "@nestjs/platform-socket.io": "^11.1.21",
     "@nestjs/schedule": "^6.0.1",
-    "@nestjs/swagger": "^8.0.7",
+    "@nestjs/swagger": "^11.2.0",
     "@nestjs/typeorm": "^11.0.1",
     "@nestjs/websockets": "^11.1.21",
     "axios": "^1.13.2",

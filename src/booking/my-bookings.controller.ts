@@ -1,4 +1,5 @@
 import { Controller, Get, UseGuards, Request } from "@nestjs/common";
+import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { JwtAuthGuard } from "../auth/jwt.guard";
@@ -6,6 +7,8 @@ import { Booking } from "./booking.entity";
 import { DelegationRecord } from "../delegation/delegation.entity";
 import { WholesaleBooking } from "../wholesale/wholesale-booking.entity";
 
+@ApiTags("My")
+@ApiBearerAuth("access-token")
 @Controller("my")
 @UseGuards(JwtAuthGuard)
 export class MyBookingsController {
@@ -17,6 +20,7 @@ export class MyBookingsController {
     private wholesale: Repository<WholesaleBooking>,
   ) {}
 
+  @ApiOperation({ summary: "List my direct & wholesale bookings" })
   @Get("bookings")
   async myBookings(@Request() req: any) {
     const guestId = req.user.id;
@@ -52,6 +56,7 @@ export class MyBookingsController {
     };
   }
   
+  @ApiOperation({ summary: "Get my currently active stay" })
   @Get("stays/active")
   async activeStay(@Request() req: any) {
     const delegation = await this.delegations
