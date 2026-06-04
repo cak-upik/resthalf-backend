@@ -14,7 +14,8 @@ import { Logger } from "@nestjs/common";
   },
   namespace: "/dashboard",
 })
-export class DashboardGateway implements OnGatewayConnection, OnGatewayDisconnect
+export class DashboardGateway
+  implements OnGatewayConnection, OnGatewayDisconnect
 {
   @WebSocketServer() server: Server;
   private readonly logger = new Logger(DashboardGateway.name);
