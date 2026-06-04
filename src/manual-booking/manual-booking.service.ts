@@ -84,7 +84,7 @@ export class ManualBookingService {
       const del = await this.delegation.create({
         roomId: params.roomId,
         bookingId: manual.id,
-        designatedEntityId: manual.id, // manual booking ref as authority holder
+        guestId: manual.id, // manual booking ref as authority holder
         startTime: params.startTime,
         endTime: params.endTime,
       });

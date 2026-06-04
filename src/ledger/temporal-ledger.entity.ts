@@ -9,6 +9,7 @@ export type LedgerEvent =
   // Time truth events (system writes automatically)
   | "AUTHORITY_ISSUED" // delegation created after payment
   | "AUTHORITY_EXPIRED" // time window ended in software
+  | "AUTHORITY_RESCHEDULED" // rescheduled notify
   // NOTE: does NOT mean guest left. Staff confirms that separately.
   // Human action events (staff writes via dashboard) ★ v2.0
   | "PHYSICAL_VACATE_CONFIRMED" // staff confirmed guest left

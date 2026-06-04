@@ -5,6 +5,8 @@ import {
   CreateDateColumn,
 } from "typeorm";
 
+export type PolicyTier = "NON_REFUNDABLE" | "DATE_CHANGE_ONLY" | "FLEXIBLE";
+
 @Entity("bookings")
 export class Booking {
   @PrimaryGeneratedColumn("uuid") id: string;
@@ -20,4 +22,5 @@ export class Booking {
   @Column({ name: "midtrans_order_id", nullable: true, unique: true })
   midtransOrderId: string;
   @CreateDateColumn({ name: "created_at" }) createdAt: Date;
+  @Column({ name: "policy_tier_snapshot" }) policyTierSnapshot: PolicyTier;
 }
