@@ -22,8 +22,8 @@ FROM base AS deps
 RUN apt-get update \
  && apt-get install -y --no-install-recommends python3 make g++ \
  && rm -rf /var/lib/apt/lists/*
-COPY package.json yarn.lock ./
-RUN yarn install --immutable
+COPY package.json ./
+RUN yarn install
 
 # ---- build: compile TypeScript -> dist/ ----
 FROM deps AS build
