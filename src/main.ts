@@ -15,6 +15,7 @@ async function bootstrap() {
         "http://localhost:8080",
         "http://10.0.2.2:3000", // Android emulator
         process.env.FRONTEND_URL,
+        process.env.SWAGGER_URL,
       ];
 
       // Allow requests with no origin (mobile apps, Postman)
