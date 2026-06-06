@@ -1,0 +1,27 @@
+# VCS / tooling
+.git
+.gitignore
+.vscode
+.idea
+
+# Dependencies & build output (regenerated inside the image)
+node_modules
+dist
+coverage
+
+# Yarn PnP artifacts — the image uses the node-modules linker instead
+.yarn
+.pnp.cjs
+.pnp.loader.mjs
+
+# Local env & secrets (provide these via Railway variables)
+.env
+.env.*
+
+# Tests & misc
+test
+**/*.spec.ts
+*.log
+*.md
+Dockerfile
+.dockerignore
