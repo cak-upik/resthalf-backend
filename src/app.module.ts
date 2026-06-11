@@ -75,6 +75,7 @@ import { WholesaleCancelController } from "./wholesale/wholesale-cancel.controll
         logging: true,
         entities: [
           Hotel,
+          Room,
           Guest,
           Staff,
           Booking,
