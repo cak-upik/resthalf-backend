@@ -63,7 +63,7 @@ export class MyBookingsController {
       .createQueryBuilder("d")
       .leftJoinAndSelect("d.room", "r")
       .leftJoinAndSelect("r.hotel", "h")
-      .innerJoin("bookings", "b", "b.delegation_id = d.id")
+      .innerJoin("bookings", "b", "b.id = d.booking_id")
       .where("b.guest_id = :id", { id: req.user.id })
       .andWhere("d.status = 'ACTIVE'")
       .andWhere("d.end_time > NOW()")

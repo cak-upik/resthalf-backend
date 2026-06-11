@@ -3,7 +3,10 @@ import {
   PrimaryGeneratedColumn,
   Column,
   CreateDateColumn,
+  ManyToOne,
+  JoinColumn,
 } from "typeorm";
+import { Room } from "../rooms/room.entity";
 
 export type PolicyTier = "NON_REFUNDABLE" | "DATE_CHANGE_ONLY" | "FLEXIBLE";
 
@@ -11,6 +14,10 @@ export type PolicyTier = "NON_REFUNDABLE" | "DATE_CHANGE_ONLY" | "FLEXIBLE";
 export class Booking {
   @PrimaryGeneratedColumn("uuid") id: string;
   @Column({ name: "room_id" }) roomId: string;
+  // Read-only relation reusing the room_id FK column (writes still go via roomId).
+  @ManyToOne(() => Room)
+  @JoinColumn({ name: "room_id" })
+  room: Room;
   @Column({ name: "guest_id" }) guestId: string;
   @Column({ name: "slot_type" }) slotType: string; // HALF_DAY | FULL_DAY
   @Column({ name: "start_time", type: "timestamptz" }) startTime: Date;
