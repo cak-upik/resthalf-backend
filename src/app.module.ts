@@ -72,9 +72,9 @@ import { WholesaleCancelController } from "./wholesale/wholesale-cancel.controll
         type: "postgres",
         url: cfg.get("DATABASE_URL"),
         synchronize: false,
+        logging: true,
         entities: [
           Hotel,
-          Room,
           Guest,
           Staff,
           Booking,
