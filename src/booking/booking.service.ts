@@ -81,19 +81,19 @@ export class BookingService {
       900, // 15 min — Midtrans payment window
     );
     // 4. Create Midtrans payment token
-    const snap = await this.payment.createSnapToken({
-      orderId,
-      amount: price,
-      guestName: guest.fullName,
-      guestPhone: guest.phone,
-      description: `Room ${room.roomNumber} | ${Math.round(hrs)}h stay`,
-    });
+    // const snap = await this.payment.createSnapToken({
+    //   orderId,
+    //   amount: price,
+    //   guestName: guest.fullName,
+    //   guestPhone: guest.phone,
+    //   description: `Room ${room.roomNumber} | ${Math.round(hrs)}h stay`,
+    // });
     await this.pel.releaseLock(pel.lockKey!);
     return {
       bookingId: booking.id,
       orderId,
-      snapToken: snap.token,
-      redirectUrl: snap.redirectUrl,
+      // snapToken: snap.token,
+      // redirectUrl: snap.redirectUrl,
       amount: price,
     };
   }
