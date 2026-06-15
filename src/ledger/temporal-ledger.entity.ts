@@ -38,7 +38,7 @@ export class TemporalLedger {
   @Column({ name: "booking_id", nullable: true }) bookingId: string;
   @Column({ name: "delegation_id", nullable: true }) delegationId: string;
   @Column({ name: "event_type" }) eventType: LedgerEvent;
-  @Column({ type: "jsonb", nullable: true }) eventData: any;
+  @Column({ name: "event_data", type: "jsonb", nullable: true }) eventData: any;
   @Column({ nullable: true }) actor: string;
   @CreateDateColumn() timestamp: Date;
 }
