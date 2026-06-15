@@ -102,7 +102,10 @@ export class PELService {
     };
   }
 
-  async releaseLock(lockKey: string): Promise<void> {
+  async releaseLock(lockKey?: string): Promise<void> {
+    // No lock is acquired when the room had no active delegation, so the
+    // booking path may call this with undefined — guard against a bad DEL.
+    if (!lockKey) return;
     await this.redis.del(lockKey);
   }
 
