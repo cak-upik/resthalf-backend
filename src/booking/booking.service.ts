@@ -10,6 +10,7 @@ import { LedgerService } from "../ledger/ledger.service";
 import { PaymentService } from "../payment/payment.service";
 import { Room } from "../rooms/room.entity";
 import { Guest } from "../guests/guest.entity";
+import { classifySlot } from "../common/slots";
 
 @Injectable()
 export class BookingService {
@@ -30,13 +31,17 @@ export class BookingService {
     guestId: string;
     startTime: Date;
     endTime: Date;
-    slotType: string;
   }) {
+    // The booked window is the source of truth (stored verbatim, recorded in
+    // the ledger, drives the client countdown). We only classify it into a
+    // slot for labelling / pricing.
+    const { startTime, endTime } = params;
+    const slotType = classifySlot(startTime, endTime);
     // 1. PEL validates and acquires Redis lock
     const pel = await this.pel.validateAndLock({
-      ...params,
-      requestedStart: params.startTime,
-      requestedEnd: params.endTime,
+      roomId: params.roomId,
+      requestedStart: startTime,
+      requestedEnd: endTime,
       requestingEntityId: params.guestId,
       isDesignatedEntity: true,
     });
@@ -51,8 +56,7 @@ export class BookingService {
     const guest = await this.guests.findOneOrFail({
       where: { id: params.guestId },
     });
-    const hrs =
-      (params.endTime.getTime() - params.startTime.getTime()) / 3600000;
+    const hrs = (endTime.getTime() - startTime.getTime()) / 3600000;
     const price = hrs <= 12 ? +room.basePriceH12 : +room.basePriceH24;
     // 2. Create PENDING booking — no delegation yet
     const orderId = `RH-${params.roomId.slice(0, 8)}-${Date.now()}`;
@@ -60,9 +64,9 @@ export class BookingService {
       this.repo.create({
         roomId: params.roomId,
         guestId: params.guestId,
-        slotType: params.slotType,
-        startTime: params.startTime,
-        endTime: params.endTime,
+        slotType,
+        startTime,
+        endTime,
         totalPrice: price,
         currency: room.currency ?? "IDR",
         status: "PENDING",
@@ -73,8 +77,8 @@ export class BookingService {
     await this.redis.set(
       `slot:${orderId}`,
       JSON.stringify({
-        startTime: params.startTime,
-        endTime: params.endTime,
+        startTime,
+        endTime,
         roomId: params.roomId,
       }),
       "EX",

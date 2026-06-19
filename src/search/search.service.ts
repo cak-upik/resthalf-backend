@@ -3,24 +3,12 @@ import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Room } from "../rooms/room.entity";
 import { WholesaleService } from "../wholesale/wholesale.service";
-
-// Two Direct slot definitions — HALF_DAY is RestHalf exclusive
-const DIRECT_SLOTS = {
-  HALF_DAY: {
-    label: "Half Day Stay",
-    startH: 0,
-    endH: 12,
-    nextDay: false,
-    exclusive: true,
-  },
-  FULL_DAY: {
-    label: "Full Day Stay",
-    startH: 12,
-    endH: 12,
-    nextDay: true,
-    exclusive: false,
-  },
-};
+import {
+  DIRECT_SLOTS,
+  SLOT_TYPES,
+  resolveSlotInterval,
+  type SlotType,
+} from "../common/slots";
 
 @Injectable()
 export class SearchService {
@@ -32,7 +20,7 @@ export class SearchService {
   async search(dto: {
     city: string;
     date: string;
-    slotType?: string;
+    slotType?: SlotType;
     nights?: number;
     adults?: number;
     includeWholesale?: boolean;
@@ -49,11 +37,15 @@ export class SearchService {
     };
   }
 
-  private async searchDirect(dto: any) {
-    const slots = dto.slotType ? [dto.slotType] : ["HALF_DAY", "FULL_DAY"];
+  private async searchDirect(dto: {
+    city: string;
+    date: string;
+    slotType?: SlotType;
+  }) {
+    const slots: SlotType[] = dto.slotType ? [dto.slotType] : SLOT_TYPES;
     const results: any[] = [];
     for (const slotType of slots) {
-      const { startTime, endTime } = this.resolveInterval(dto.date, slotType);
+      const { startTime, endTime } = resolveSlotInterval(dto.date, slotType);
       const rooms = await this.roomRepo
         .createQueryBuilder("r")
         .innerJoinAndSelect("r.hotel", "h")
@@ -124,17 +116,6 @@ AND start_time<$2 AND end_time>$3`,
     }));
   }
 
-  private resolveInterval(date: string, slotType: string) {
-    const slot = DIRECT_SLOTS[slotType];
-    const d = new Date(date);
-    const start = new Date(d);
-    start.setHours(slot.startH, 0, 0, 0);
-    const end = new Date(d);
-    end.setDate(d.getDate() + (slot.nextDay ? 1 : 0));
-    end.setHours(slot.endH, 0, 0, 0);
-    return { startTime: start, endTime: end };
-  }
-  
   private addNights(date: string, nights: number): string {
     const d = new Date(date);
     d.setDate(d.getDate() + nights);

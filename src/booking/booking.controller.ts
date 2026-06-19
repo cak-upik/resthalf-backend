@@ -28,7 +28,6 @@ export class BookingController {
       guestId: req.user.id,
       startTime: new Date(body.startTime),
       endTime: new Date(body.endTime),
-      slotType: body.slotType,
     });
   }
   

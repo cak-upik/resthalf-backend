@@ -14,6 +14,7 @@ export class SearchController {
     return this.searchSvc.search({
       city: query.city,
       date: query.date,
+      slotType: query.slotType,
       nights: query.nights,
       adults: query.adults,
       includeWholesale: query.includeWholesale,

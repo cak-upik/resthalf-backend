@@ -1,6 +1,15 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 import { Transform, Type } from "class-transformer";
-import { IsBoolean, IsInt, IsNotEmpty, IsOptional, IsString, Min } from "class-validator";
+import {
+  IsBoolean,
+  IsIn,
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Min,
+} from "class-validator";
+import { SLOT_TYPES, type SlotType } from "../../common/slots";
 
 export class SearchDto {
   @ApiProperty({ example: "Jakarta" })
@@ -12,6 +21,14 @@ export class SearchDto {
   @IsString()
   @IsNotEmpty()
   date: string;
+
+  @ApiPropertyOptional({
+    enum: SLOT_TYPES,
+    description: "Filter to a single slot; omit to return both",
+  })
+  @IsOptional()
+  @IsIn(SLOT_TYPES)
+  slotType?: SlotType;
 
   @ApiPropertyOptional({ example: 1, default: 1, minimum: 1 })
   @IsOptional()
