@@ -80,10 +80,11 @@ export class ManualBookingService {
         paymentCollectedAt:
           params.paymentMethod !== "AT_HOTEL" ? new Date() : undefined,
       });
-      // 2. Issue delegation authority — manual booking goes through PEL like any direct booking
+      // 2. Issue delegation authority — manual booking goes through PEL like any direct booking.
+      // No bookingId: a manual booking lives in `manual_bookings`, not `bookings`
+      // (the FK target). The link is manual_bookings.delegation_id, set below.
       const del = await this.delegation.create({
         roomId: params.roomId,
-        bookingId: manual.id,
         guestId: manual.id, // manual booking ref as authority holder
         startTime: params.startTime,
         endTime: params.endTime,
@@ -91,14 +92,15 @@ export class ManualBookingService {
       await qr.manager.update(ManualBooking, manual.id, {
         delegationId: del.id,
       });
-      // 3. Append to ledger
+      // 3. Append to ledger (manualBookingId lives in eventData — booking_id FK
+      // references `bookings`, which a manual booking is not part of).
       await this.ledger.append({
         roomId: params.roomId,
-        bookingId: manual.id,
         delegationId: del.id,
         eventType: "AUTHORITY_ISSUED",
         eventData: {
           source: "MANUAL_BOOKING",
+          manualBookingId: manual.id,
           staffId: params.staffId,
           guestName: params.guestName,
           paymentMethod: params.paymentMethod,
@@ -152,10 +154,10 @@ export class ManualBookingService {
     });
     await this.ledger.append({
       roomId: b.roomId,
-      bookingId: b.id,
       delegationId: b.delegationId,
       eventType: "PAYMENT_CAPTURED",
       eventData: {
+        manualBookingId: b.id,
         amount: b.totalAmount,
         method: b.paymentMethod,
         collectedBy: staffId,

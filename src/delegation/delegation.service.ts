@@ -12,7 +12,7 @@ export class DelegationService {
 
   async create(data: {
     roomId: string;
-    bookingId: string;
+    bookingId?: string; // omitted for manual bookings (not a `bookings` row)
     guestId: string;
     startTime: Date;
     endTime: Date;
